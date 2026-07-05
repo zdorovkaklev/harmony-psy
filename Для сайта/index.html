@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Центр психологической помощи Гармония</title>
+<style>
+  :root {
+    --sky: #87CEEB;
+    --sky-light: #E0F6FF;
+    --sky-dark: #5DADE2;
+    --white: #FFFFFF;
+    --text: #2C3E50;
+    --text-light: #5D6D7E;
+    --accent: #3498DB;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  body { background: var(--white); color: var(--text); }
+  .page { display: none; animation: fadeIn 0.5s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .header {
+    background: linear-gradient(135deg, var(--sky) 0%, var(--sky-dark) 100%);
+    color: var(--white);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(93,173,226,0.3);
+  }
+  .logo-area { display: flex; align-items: center; gap: 15px; }
+  .logo-circle {
+    width: 60px; height: 60px; background: var(--white); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden;
+  }
+  .logo-circle svg { width: 44px; height: 44px; }
+  .site-title { font-size: 24px; font-weight: 700; }
+  .site-subtitle { font-size: 13px; opacity: 0.9; margin-top: 2px; }
+  .nav-links { display: flex; gap: 25px; }
+  .nav-links a {
+    color: var(--white); text-decoration: none; font-size: 15px;
+    padding: 8px 16px; border-radius: 20px; transition: all 0.3s;
+    cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: rgba(255,255,255,0.2); border-color: var(--white);
+  }
+
+  .hero {
+    background: linear-gradient(180deg, var(--sky-light) 0%, var(--white) 100%);
+    padding: 60px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 36px; color: var(--sky-dark); margin-bottom: 15px; }
+  .hero p { font-size: 18px; color: var(--text-light); max-width: 700px; margin: 0 auto 30px; line-height: 1.6; }
+
+  .spheres {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;
+  }
+  .sphere-card {
+    background: var(--white); border: 2px solid var(--sky); border-radius: 16px;
+    padding: 20px 25px; min-width: 180px; text-align: center;
+    box-shadow: 0 4px 15px rgba(135,206,235,0.2); transition: transform 0.3s;
+    cursor: pointer;
+  }
+  .sphere-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(135,206,235,0.3); }
+  .sphere-card .icon { font-size: 32px; margin-bottom: 10px; }
+  .sphere-card h3 { font-size: 16px; color: var(--sky-dark); }
+
+  .section { padding: 50px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-title {
+    font-size: 28px; color: var(--sky-dark); text-align: center; margin-bottom: 40px;
+    position: relative;
+  }
+  .section-title::after {
+    content: ''; display: block; width: 60px; height: 3px;
+    background: var(--sky); margin: 10px auto 0; border-radius: 2px;
+  }
+  .spec-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+  }
+  .spec-card {
+    background: var(--white); border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 25px rgba(135,206,235,0.15);
+    border: 1px solid rgba(135,206,235,0.3); transition: all 0.3s;
+    cursor: pointer;
+  }
+  .spec-card:hover { transform: translateY(-8px); box-shadow: 0 12px 35px rgba(135,206,235,0.25); }
+  .spec-img {
+    width: 100%; height: 280px; object-fit: cover; display: block;
+  }
+  .spec-info { padding: 20px; }
+  .spec-info h3 { font-size: 18px; color: var(--text); margin-bottom: 5px; }
+  .spec-info .role { color: var(--sky-dark); font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .spec-info p { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+  .spec-link {
+    display: inline-block; margin-top: 12px; color: var(--accent);
+    text-decoration: none; font-size: 14px; font-weight: 600;
+  }
+  .spec-link:hover { text-decoration: underline; }
+
+  .detail-hero {
+    background: linear-gradient(135deg, var(--sky-light) 0%, var(--white) 100%);
+    padding: 40px; display: flex; gap: 40px; align-items: center; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .detail-photo {
+    width: 280px; height: 280px; border-radius: 50%; object-fit: cover;
+    border: 5px solid var(--sky); box-shadow: 0 8px 30px rgba(135,206,235,0.3);
+  }
+  .detail-info { max-width: 600px; }
+  .detail-info h1 { font-size: 32px; color: var(--sky-dark); margin-bottom: 10px; }
+  .detail-info .detail-role { font-size: 18px; color: var(--accent); margin-bottom: 20px; }
+  .detail-info p { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-bottom: 15px; }
+  .detail-info ul { margin-left: 20px; margin-bottom: 15px; }
+  .detail-info li { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-bottom: 8px; }
+
+  .service-hero {
+    background: linear-gradient(180deg, var(--sky-light) 0%, var(--white) 100%);
+    padding: 50px 40px; text-align: center;
+  }
+  .service-hero h1 { font-size: 32px; color: var(--sky-dark); margin-bottom: 15px; }
+  .service-hero .service-icon { font-size: 60px; margin-bottom: 15px; }
+  .service-content { max-width: 800px; margin: 0 auto; padding: 30px 40px; }
+  .service-content h2 { font-size: 22px; color: var(--sky-dark); margin: 25px 0 12px; }
+  .service-content p { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-bottom: 15px; }
+  .service-content ul { margin-left: 20px; margin-bottom: 15px; }
+  .service-content li { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-bottom: 8px; }
+  .service-content .highlight-box {
+    background: var(--sky-light); border-left: 4px solid var(--sky-dark);
+    padding: 20px; border-radius: 0 12px 12px 0; margin: 20px 0;
+  }
+
+  .chart-section { margin-top: 30px; }
+  .chart-section h3 { font-size: 20px; color: var(--sky-dark); margin-bottom: 20px; }
+  .chart-container {
+    background: var(--white); border-radius: 16px; padding: 25px;
+    box-shadow: 0 4px 20px rgba(135,206,235,0.15); border: 1px solid var(--sky-light);
+  }
+  .chart { display: flex; align-items: flex-end; justify-content: space-around; height: 250px; padding: 0 10px; }
+  .bar-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .bar {
+    width: 50px; background: linear-gradient(180deg, var(--sky) 0%, var(--sky-dark) 100%);
+    border-radius: 8px 8px 0 0; transition: height 1s ease; position: relative;
+    box-shadow: 0 2px 10px rgba(135,206,235,0.3);
+  }
+  .bar-label { margin-top: 10px; font-size: 12px; color: var(--text-light); text-align: center; }
+  .bar-value {
+    position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+    font-size: 13px; font-weight: 700; color: var(--sky-dark);
+  }
+
+  .contacts-hero {
+    background: linear-gradient(180deg, var(--sky-light) 0%, var(--white) 100%);
+    padding: 40px; text-align: center;
+  }
+  .contacts-hero h1 { font-size: 32px; color: var(--sky-dark); margin-bottom: 10px; }
+  .contacts-hero p { font-size: 16px; color: var(--text-light); }
+  .contacts-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px; max-width: 1200px; margin: 0 auto;
+  }
+  @media (max-width: 900px) { .contacts-layout { grid-template-columns: 1fr; } }
+  .contact-info h2 { font-size: 22px; color: var(--sky-dark); margin-bottom: 20px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 15px; margin-bottom: 16px;
+    padding: 14px 18px; background: var(--sky-light); border-radius: 12px;
+    border-left: 4px solid var(--sky-dark);
+  }
+  .contact-item .icon { font-size: 22px; min-width: 30px; text-align: center; }
+  .contact-item div h4 { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .contact-item div p { font-size: 15px; color: var(--text); font-weight: 600; }
+
+  .route-panel {
+    background: var(--white); border-radius: 16px; padding: 25px;
+    box-shadow: 0 4px 20px rgba(135,206,235,0.15); border: 1px solid var(--sky-light);
+    margin-top: 20px;
+  }
+  .route-panel h3 { font-size: 18px; color: var(--sky-dark); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+  .route-step {
+    display: flex; gap: 15px; margin-bottom: 14px; align-items: flex-start;
+  }
+  .route-num {
+    width: 28px; height: 28px; background: var(--sky-dark); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+  .route-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+  .route-text strong { color: var(--sky-dark); }
+
+  .map-section h2 { font-size: 22px; color: var(--sky-dark); margin-bottom: 15px; }
+  .map-container {
+    background: var(--sky-light); border-radius: 20px; height: 420px;
+    border: 2px solid var(--sky); position: relative; overflow: hidden;
+  }
+  .map-svg { width: 100%; height: 100%; }
+
+  .footer {
+    background: linear-gradient(135deg, var(--sky-dark) 0%, var(--sky) 100%);
+    color: var(--white); padding: 30px 40px; text-align: center; margin-top: 40px;
+  }
+  .footer p { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+  .footer a { color: var(--white); text-decoration: underline; cursor: pointer; }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--sky); color: var(--white); border: none;
+    padding: 10px 24px; border-radius: 25px; font-size: 15px; cursor: pointer;
+    margin: 20px 40px; transition: background 0.3s;
+  }
+  .back-btn:hover { background: var(--sky-dark); }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-circle">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <text x="50" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="none" stroke="#2C3E50" stroke-width="4" filter="url(#glow)">Ψ</text>
+          <text x="50" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#FFD700">Ψ</text>
+          <text x="50" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="none" stroke="#FFF8DC" stroke-width="1" opacity="0.6">Ψ</text>
+        </svg>
+      </div>
+      <div>
+        <div class="site-title">Центр «Гармония»</div>
+        <div class="site-subtitle">Психологическая помощь и поддержка</div>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a onclick="showPage('home')" id="nav-home" class="active">Главная</a>
+      <a onclick="showPage('contacts')" id="nav-contacts">Контакты</a>
+    </nav>
+  </header>
+
+  <div id="page-home" class="page active">
+    <section class="hero">
+      <h1>Центр психологической помощи «Гармония»</h1>
+      <p>Мы создаем безопасное пространство для вашего внутреннего роста. Профессиональная поддержка в сложных жизненных ситуациях, индивидуальный подход и конфиденциальность гарантированы.</p>
+      <div class="spheres">
+        <div class="sphere-card" onclick="showPage('individual')">
+          <div class="icon">&#129504;</div>
+          <h3>Индивидуальная терапия</h3>
+        </div>
+        <div class="sphere-card" onclick="showPage('family')">
+          <div class="icon">&#128106;</div>
+          <h3>Семейное консультирование</h3>
+        </div>
+        <div class="sphere-card" onclick="showPage('gestalt')">
+          <div class="icon">&#129496;</div>
+          <h3>Гештальт-терапия</h3>
+        </div>
+        <div class="sphere-card" onclick="showPage('art')">
+          <div class="icon">&#127912;</div>
+          <h3>Арт-терапия</h3>
+        </div>
+        <div class="sphere-card" onclick="showPage('career')">
+          <div class="icon">&#128200;</div>
+          <h3>Карьерное консультирование</h3>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Динамика роста клиентов центра «Гармония»</h2>
+      <div class="chart-container">
+        <div class="chart" id="chart-center">
+          <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="60"><span class="bar-value">450</span></div><div class="bar-label">2021</div></div>
+          <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="100"><span class="bar-value">720</span></div><div class="bar-label">2022</div></div>
+          <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="140"><span class="bar-value">980</span></div><div class="bar-label">2023</div></div>
+          <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="180"><span class="bar-value">1250</span></div><div class="bar-label">2024</div></div>
+          <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="220"><span class="bar-value">1580</span></div><div class="bar-label">2025</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Наши специалисты</h2>
+      <div class="spec-grid">
+        <div class="spec-card" onclick="showPage('ivanova')">
+          <img src="Девушка 1.jpg" class="spec-img" alt="Иванова Елена Сергеевна">
+          <div class="spec-info">
+            <h3>Иванова Елена Сергеевна</h3>
+            <div class="role">Клинический психолог, гештальт-терапевт</div>
+            <p>Стаж 15 лет. Специализация: тревожные расстройства, депрессии, кризисные состояния.</p>
+            <span class="spec-link">Подробнее &rarr;</span>
+          </div>
+        </div>
+        <div class="spec-card" onclick="showPage('petrov')">
+          <img src="Мужчина 1.jpg" class="spec-img" alt="Петров Алексей Владимирович">
+          <div class="spec-info">
+            <h3>Петров Алексей Владимирович</h3>
+            <div class="role">Семейный психотерапевт, психодрама-терапевт</div>
+            <p>Стаж 12 лет. Специализация: семейные конфликты, детско-родительские отношения.</p>
+            <span class="spec-link">Подробнее &rarr;</span>
+          </div>
+        </div>
+        <div class="spec-card" onclick="showPage('smirnova')">
+          <img src="Девушка 2.jpg" class="spec-img" alt="Смирнова Ольга Дмитриевна">
+          <div class="spec-info">
+            <h3>Смирнова Ольга Дмитриевна</h3>
+            <div class="role">Детский психолог, арт-терапевт</div>
+            <p>Стаж 10 лет. Специализация: эмоциональные нарушения у детей, адаптация к школе.</p>
+            <span class="spec-link">Подробнее &rarr;</span>
+          </div>
+        </div>
+        <div class="spec-card" onclick="showPage('kozlov')">
+          <img src="Мужчина 2 .jpg" class="spec-img" alt="Козлов Дмитрий Андреевич">
+          <div class="spec-info">
+            <h3>Козлов Дмитрий Андреевич</h3>
+            <div class="role">Бизнес-психолог, карьерный консультант</div>
+            <p>Стаж 8 лет. Специализация: профессиональное выгорание, командообразование.</p>
+            <span class="spec-link">Подробнее &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="page-individual" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="service-hero">
+      <div class="service-icon">&#129504;</div>
+      <h1>Индивидуальная терапия</h1>
+      <p>Персональная работа с психологом для решения личных проблем и внутреннего роста</p>
+    </div>
+    <div class="service-content">
+      <h2>Что такое индивидуальная терапия?</h2>
+      <p>Индивидуальная терапия — это формат работы «один на один» с квалифицированным психологом, направленный на исследование вашего внутреннего мира, осознание паттернов поведения и поиск эффективных способов преодоления жизненных трудностей.</p>
+      <div class="highlight-box">
+        <strong>Кому подходит:</strong> людям, переживающим стресс, тревогу, депрессию, кризисные состояния, а также тем, кто стремится к личностному росту и самопознанию.
+      </div>
+      <h2>Направления работы</h2>
+      <ul>
+        <li><strong>Когнитивно-поведенческая терапия (КПТ)</strong> — работа с негативными мыслями и поведенческими реакциями</li>
+        <li><strong>Психоаналитическая терапия</strong> — исследование бессознательных мотивов и детских травм</li>
+        <li><strong>Экзистенциальная терапия</strong> — поиск смысла и ценностей в жизни</li>
+        <li><strong>Телесно-ориентированная терапия</strong> — работа с телесными зажимами и соматическими реакциями</li>
+      </ul>
+      <h2>Формат и стоимость</h2>
+      <p>Сеанс длится 50 минут. Рекомендуемый курс — от 8 до 12 встреч. Возможна работа как в очном формате в центре, так и онлайн через защищенную видеосвязь.</p>
+      <div class="chart-section">
+        <h3>Динамика роста клиентов по индивидуальной терапии</h3>
+        <div class="chart-container">
+          <div class="chart" id="chart-individual">
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="70"><span class="bar-value">180</span></div><div class="bar-label">2021</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="110"><span class="bar-value">290</span></div><div class="bar-label">2022</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="150"><span class="bar-value">410</span></div><div class="bar-label">2023</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="190"><span class="bar-value">540</span></div><div class="bar-label">2024</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="230"><span class="bar-value">680</span></div><div class="bar-label">2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-family" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="service-hero">
+      <div class="service-icon">&#128106;</div>
+      <h1>Семейное консультирование</h1>
+      <p>Восстановление гармонии в отношениях и улучшение семейного климата</p>
+    </div>
+    <div class="service-content">
+      <h2>Что такое семейное консультирование?</h2>
+      <p>Семейное консультирование — это совместная работа психолога с членами семьи, направленная на улучшение взаимопонимания, разрешение конфликтов и восстановление эмоциональной близости. Терапевт выступает нейтральным посредником, помогая каждому члену семьи быть услышанным.</p>
+      <div class="highlight-box">
+        <strong>Кому подходит:</strong> супружеским парам в кризисе, родителям с детьми подросткового возраста, семьям после развода, родственникам с длительными конфликтами.
+      </div>
+      <h2>Основные задачи</h2>
+      <ul>
+        <li>Улучшение коммуникации между супругами и родителями с детьми</li>
+        <li>Преодоление кризисов верности и восстановление доверия</li>
+        <li>Адаптация к новым семейным ролям (рождение ребенка, переезд)</li>
+        <li>Подготовка к разводу или помощь в восстановлении отношений после него</li>
+        <li>Работа с созависимостью и треугольниками в семье</li>
+      </ul>
+      <h2>Методы работы</h2>
+      <p>Мы используем методы системной семейной терапии, психодрамы, нарративного подхода и эмоционально-фокусированной терапии (EFT). Сеанс длится 80-90 минут, рекомендуемый курс — от 6 до 10 встреч.</p>
+      <div class="chart-section">
+        <h3>Динамика роста клиентов по семейному консультированию</h3>
+        <div class="chart-container">
+          <div class="chart" id="chart-family">
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="55"><span class="bar-value">95</span></div><div class="bar-label">2021</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="95"><span class="bar-value">170</span></div><div class="bar-label">2022</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="135"><span class="bar-value">245</span></div><div class="bar-label">2023</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="175"><span class="bar-value">330</span></div><div class="bar-label">2024</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="210"><span class="bar-value">420</span></div><div class="bar-label">2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-gestalt" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="service-hero">
+      <div class="service-icon">&#129496;</div>
+      <h1>Гештальт-терапия</h1>
+      <p>Осознание «здесь и сейчас» для целостности личности</p>
+    </div>
+    <div class="service-content">
+      <h2>Что такое гештальт-терапия?</h2>
+      <p>Гештальт-терапия — это гуманистический подход, основанный на идее, что человек стремится к целостности и саморегуляции. Терапия фокусируется на переживаниях «здесь и сейчас», помогая клиенту осознать незавершенные ситуации (незавершенные гештальты) и найти внутренние ресурсы для их завершения.</p>
+      <div class="highlight-box">
+        <strong>Кому подходит:</strong> людям с чувством «застрявшей» жизни, перфекционистам, тем, кто испытывает трудности в принятии решений, а также всем, кто хочет глубже понять себя.
+      </div>
+      <h2>Принципы гештальт-подхода</h2>
+      <ul>
+        <li><strong>Феноменология</strong> — исследование опыта без интерпретаций и оценок</li>
+        <li><strong>Диалог</strong> — искреннее присутствие терапевта в отношениях</li>
+        <li><strong>Эксперимент</strong> — безопасное пробование новых способов поведения</li>
+        <li><strong>Телесный фокус</strong> — внимание к телесным ощущениям как к ключу к эмоциям</li>
+        <li><strong>Работа с полярностями</strong> — интеграция противоположных частей личности</li>
+      </ul>
+      <h2>Формат работы</h2>
+      <p>Гештальт-терапия может проводиться в индивидуальном, парном и групповом формате. Групповые сессии проходят по выходным и включают творческие эксперименты, работу с креслом «пустого стула» и телесные практики.</p>
+      <div class="chart-section">
+        <h3>Динамика роста клиентов по гештальт-терапии</h3>
+        <div class="chart-container">
+          <div class="chart" id="chart-gestalt">
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="50"><span class="bar-value">85</span></div><div class="bar-label">2021</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="90"><span class="bar-value">155</span></div><div class="bar-label">2022</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="130"><span class="bar-value">230</span></div><div class="bar-label">2023</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="170"><span class="bar-value">310</span></div><div class="bar-label">2024</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="205"><span class="bar-value">395</span></div><div class="bar-label">2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-art" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="service-hero">
+      <div class="service-icon">&#127912;</div>
+      <h1>Арт-терапия</h1>
+      <p>Исцеление через творчество и самовыражение</p>
+    </div>
+    <div class="service-content">
+      <h2>Что такое арт-терапия?</h2>
+      <p>Арт-терапия — это метод психологической помощи, использующий творческий процесс (рисование, лепку, коллаж, музыку, движение) для выражения внутренних переживаний, которые трудно передать словами. Творчество становится мостом между сознанием и бессознательным.</p>
+      <div class="highlight-box">
+        <strong>Кому подходит:</strong> детям и взрослым с трудностями вербализации эмоций, людям пережившим травму, пациентам с тревожными расстройствами, а также всем, кто ищет нестандартные пути самопознания.
+      </div>
+      <h2>Виды арт-терапии в центре</h2>
+      <ul>
+        <li><strong>Изотерапия</strong> — работа с красками, пастелью, углем и цветными карандашами</li>
+        <li><strong>Песочная терапия</strong> — создание миров в песочнице с миниатюрными фигурками</li>
+        <li><strong>Музыкотерапия</strong> — импровизация на инструментах, вокальная терапия, ритмика</li>
+        <li><strong>Танцевально-двигательная терапия</strong> — освобождение через движение тела</li>
+        <li><strong>Библиотерапия</strong> — работа с метафорой через сказки и мифы</li>
+      </ul>
+      <h2>Особенности подхода</h2>
+      <p>Не требуется художественных навыков! Важен сам процесс, а не результат. Арт-терапевт помогает интерпретировать созданное и находить связи с внутренним миром клиента. Занятия проходят в специально оборудованной творческой мастерской.</p>
+      <div class="chart-section">
+        <h3>Динамика роста клиентов по арт-терапии</h3>
+        <div class="chart-container">
+          <div class="chart" id="chart-art">
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="45"><span class="bar-value">65</span></div><div class="bar-label">2021</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="80"><span class="bar-value">120</span></div><div class="bar-label">2022</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="120"><span class="bar-value">185</span></div><div class="bar-label">2023</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="160"><span class="bar-value">260</span></div><div class="bar-label">2024</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="195"><span class="bar-value">340</span></div><div class="bar-label">2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-career" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="service-hero">
+      <div class="service-icon">&#128200;</div>
+      <h1>Карьерное консультирование</h1>
+      <p>Профессиональная навигация и преодоление выгорания</p>
+    </div>
+    <div class="service-content">
+      <h2>Что такое карьерное консультирование?</h2>
+      <p>Карьерное консультирование — это комплексная помощь в выборе, смене или развитии профессионального пути. Мы помогаем разобраться в своих сильных сторонах, ценностях и интересах, чтобы принять осознанное карьерное решение и избежать профессионального выгорания.</p>
+      <div class="highlight-box">
+        <strong>Кому подходит:</strong> выпускникам выбирающим профессию, специалистам в кризисе карьеры, руководителям сталкивающимся с выгоранием, тем, кто планирует смену сферы деятельности.
+      </div>
+      <h2>Услуги карьерного консультирования</h2>
+      <ul>
+        <li><strong>Профессиональная ориентация</strong> — тестирование способностей, интересов и ценностей (методика Holland, MBTI, Strong)</li>
+        <li><strong>Коучинг карьерных переходов</strong> — планирование смены работы или профессии</li>
+        <li><strong>Антистресс-менеджмент</strong> — преодоление синдрома выгорания и хронической усталости</li>
+        <li><strong>Развитие лидерских качеств</strong> — работа с уверенностью, коммуникацией, делегированием</li>
+        <li><strong>Командный коучинг</strong> — тренинги для бизнес-команд по улучшению взаимодействия</li>
+      </ul>
+      <h2>Формат и инструменты</h2>
+      <p>Индивидуальные сессии (60 мин), групповые тренинги (3-4 часа), корпоративные программы. Используем диагностические методики, кейс-стади, ролевые игры и техники mindfulness для управления стрессом.</p>
+      <div class="chart-section">
+        <h3>Динамика роста клиентов по карьерному консультированию</h3>
+        <div class="chart-container">
+          <div class="chart" id="chart-career">
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="65"><span class="bar-value">110</span></div><div class="bar-label">2021</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="105"><span class="bar-value">195</span></div><div class="bar-label">2022</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="145"><span class="bar-value">280</span></div><div class="bar-label">2023</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="185"><span class="bar-value">370</span></div><div class="bar-label">2024</div></div>
+            <div class="bar-wrapper"><div class="bar" style="height:0px" data-h="220"><span class="bar-value">460</span></div><div class="bar-label">2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-ivanova" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="detail-hero">
+      <img src="Девушка 1.jpg" class="detail-photo" alt="Иванова Елена Сергеевна">
+      <div class="detail-info">
+        <h1>Иванова Елена Сергеевна</h1>
+        <div class="detail-role">Клинический психолог, гештальт-терапевт</div>
+        <p><strong>Образование:</strong></p>
+        <ul>
+          <li>Московский государственный университет им. М.В. Ломоносова, факультет психологии (2006-2011) — диплом с отличием</li>
+          <li>Московский гештальт-институт, программа «Гештальт-терапия» (2012-2015)</li>
+          <li>Институт психотерапии и консультирования «Гармония», курс «Кризисная психотерапия» (2016)</li>
+          <li>Европейская ассоциация гештальт-терапии (EAGT), сертификационная программа (2018)</li>
+        </ul>
+        <p><strong>Опыт работы:</strong> 15 лет практики. С 2011 по 2015 работала в Московском психоневрологическом диспансере №5 (отделение неврозов). С 2015 года ведет частную практику, с 2019 — в центре «Гармония». Член Российской психотерапевтической ассоциации (РПА) с 2014 года.</p>
+        <p><strong>Специализация:</strong> тревожные расстройства (ГТР, панические атаки), депрессивные состояния, кризисная психотерапия, работа с ПТСР, психосоматика. Проводит индивидуальные и групповые занятия, ведет супервизии для молодых специалистов.</p>
+        <p><strong>Дополнительно:</strong> автор 12 научных публикаций по когнитивно-поведенческой терапии, участник международных конференций в Берлине (2019) и Вене (2022).</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-petrov" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="detail-hero">
+      <img src="Мужчина 1.jpg" class="detail-photo" alt="Петров Алексей Владимирович">
+      <div class="detail-info">
+        <h1>Петров Алексей Владимирович</h1>
+        <div class="detail-role">Семейный психотерапевт, психодрама-терапевт</div>
+        <p><strong>Образование:</strong></p>
+        <ul>
+          <li>Санкт-Петербургский государственный университет, факультет психологии (2005-2010)</li>
+          <li>Moreno Institute (США), сертификация по классической психодраме (2011-2014)</li>
+          <li>Московский институт системной семейной терапии, программа «Системная семейная терапия» (2015-2017)</li>
+          <li>Европейский институт системной терапии (EIST), повышение квалификации (2020)</li>
+        </ul>
+        <p><strong>Опыт работы:</strong> 12 лет. С 2010 по 2016 работал в Центре семейной терапии «Семейный круг» (Санкт-Петербург). С 2016 переехал в Москву, основал авторскую методику «Диалог через действие» — интеграция психодрамы и системного подхода. С 2020 года — ведущий специалист центра «Гармония».</p>
+        <p><strong>Специализация:</strong> семейные конфликты и кризисы, развод и адаптация после него, детско-родительские отношения, подростковая психология, работа с созависимостью. Проводит семинары для родителей «Понять подростка» (ежемесячно, группа до 12 человек).</p>
+        <p><strong>Дополнительно:</strong> соавтор книги «Психодрама в работе с семьями» (2021), лектор на конференции «Семья и общество» (Москва, 2023).</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-smirnova" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="detail-hero">
+      <img src="Девушка 2.jpg" class="detail-photo" alt="Смирнова Ольга Дмитриевна">
+      <div class="detail-info">
+        <h1>Смирнова Ольга Дмитриевна</h1>
+        <div class="detail-role">Детский психолог, арт-терапевт</div>
+        <p><strong>Образование:</strong></p>
+        <ul>
+          <li>Российский государственный педагогический университет им. А.И. Герцена, факультет психологии (2008-2013)</li>
+          <li>Институт практической психологии «Иматон», специализация «Арт-терапия с детьми» (2014-2016)</li>
+          <li>Британская ассоциация арт-терапевтов (BAAT), дистанционный курс (2017-2018)</li>
+          <li>Московский городской педагогический университет, курс «Нейропсихология детского возраста» (2019)</li>
+        </ul>
+        <p><strong>Опыт работы:</strong> 10 лет. С 2013 по 2017 — школьный психолог в гимназии №1543 (Москва). С 2017 по 2019 — старший психолог в детском реабилитационном центре «Солнечный круг». С 2019 года — в центре «Гармония». Организует творческие мастер-классы для детей с ОВЗ и их родителей.</p>
+        <p><strong>Специализация:</strong> эмоциональные нарушения у детей 4-12 лет, адаптация к школе и детскому саду, социализация, работа с детьми с ЗПР и аутизмом через арт-терапию, песочную терапию и сказкотерапию.</p>
+        <p><strong>Дополнительно:</strong> разработала авторскую программу «Цветные эмоции» для развития эмоционального интеллекта у дошкольников. Участник проекта «Психолог в школе» Минобрнауки РФ (2021-2023).</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-kozlov" class="page">
+    <button class="back-btn" onclick="showPage('home')">&larr; Назад на главную</button>
+    <div class="detail-hero">
+      <img src="Мужчина 2 .jpg" class="detail-photo" alt="Козлов Дмитрий Андреевич">
+      <div class="detail-info">
+        <h1>Козлов Дмитрий Андреевич</h1>
+        <div class="detail-role">Бизнес-психолог, карьерный консультант</div>
+        <p><strong>Образование:</strong></p>
+        <ul>
+          <li>Национальный исследовательский университет «Высшая школа экономики», факультет психологии (2010-2015) — красный диплом</li>
+          <li>Институт бизнеса и дизайна (B&D), программа MBA «Управление персоналом» (2016-2018)</li>
+          <li>Международная федерация коучинга (ICF), сертификация ACC (2019)</li>
+          <li>Гарвардская бизнес-школа (HBX), онлайн-курс «Organizational Behavior» (2021)</li>
+        </ul>
+        <p><strong>Опыт работы:</strong> 8 лет в психологии, 12 лет в HR. С 2015 по 2018 — HR-директор в IT-компании «Нексус Софт». С 2018 года — частная практика как бизнес-психолог и карьерный консультант. С 2021 года — ведущий специалист центра «Гармония» по направлению карьерного консультирования. Проводит корпоративные тренинги для компаний из списка Fortune 500.</p>
+        <p><strong>Специализация:</strong> профессиональное выгорание и синдром хронической усталости, карьерные переходы и смена профессии, развитие лидерских качеств и управленческих компетенций, командообразование и разрешение конфликтов в команде, HR-консультирование и оценка персонала.</p>
+        <p><strong>Дополнительно:</strong> сертифицированный тренер по методике Everything DiSC, автор блога «Психология карьеры» (более 50 000 подписчиков), спикер TEDx Moscow (2023) на тему «Почему мы выгораем и как с этим бороться».</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-contacts" class="page">
+    <section class="contacts-hero">
+      <h1>Контакты</h1>
+      <p>Свяжитесь с нами удобным для вас способом. Мы работаем ежедневно с 9:00 до 21:00.</p>
+    </section>
+    <div class="contacts-layout">
+      <div>
+        <div class="contact-info">
+          <h2>Наши контакты</h2>
+          <div class="contact-item">
+            <div class="icon">&#128205;</div>
+            <div><h4>Адрес</h4><p>г. Москва, Ленинградский проспект, д. 15, корп. 2, офис 304</p></div>
+          </div>
+          <div class="contact-item">
+            <div class="icon">&#128222;</div>
+            <div><h4>Телефон</h4><p>+7 (495) 234-56-78</p></div>
+          </div>
+          <div class="contact-item">
+            <div class="icon">&#128241;</div>
+            <div><h4>Мобильный</h4><p>+7 (916) 789-12-34</p></div>
+          </div>
+          <div class="contact-item">
+            <div class="icon">&#9993;</div>
+            <div><h4>Email</h4><p>info@harmony-psy.ru</p></div>
+          </div>
+          <div class="contact-item">
+            <div class="icon">&#128336;</div>
+            <div><h4>Режим работы</h4><p>Пн-Сб: 9:00 - 21:00, Вс: 10:00 - 18:00</p></div>
+          </div>
+          <div class="contact-item">
+            <div class="icon">&#128647;</div>
+            <div><h4>Ближайшее метро</h4><p>«Динамо» (7 мин. пешком), «Белорусская» (12 мин.)</p></div>
+          </div>
+        </div>
+
+        <div class="route-panel">
+          <h3>Как добраться до центра</h3>
+          <div class="route-step">
+            <div class="route-num">1</div>
+            <div class="route-text"><strong>От метро «Динамо»:</strong> выход №2 (на Ленинградский проспект). Поверните налево и идите вдоль проспекта в сторону центра примерно 500 метров.</div>
+          </div>
+          <div class="route-step">
+            <div class="route-num">2</div>
+            <div class="route-text"><strong>Ориентир:</strong> пройдите мимо торгового центра «Авиапарк», через 150 метров увидите жилой комплекс «Скай Гарден» (белое здание с голубыми вставками).</div>
+          </div>
+          <div class="route-step">
+            <div class="route-num">3</div>
+            <div class="route-text"><strong>Вход:</strong> вход со двора, через арку. Нажмите домофон «304 — Центр Гармония». Поднимитесь на лифте на 3-й этаж, офис 304.</div>
+          </div>
+          <div class="route-step">
+            <div class="route-num">4</div>
+            <div class="route-text"><strong>На автомобиле:</strong> бесплатная парковка во дворе (въезд с улицы Бутырской). Сообщите охране, что едете в центр «Гармония».</div>
+          </div>
+          <div class="route-step">
+            <div class="route-num">5</div>
+            <div class="route-text"><strong>От метро «Белорусская»:</strong> выход к Ленинградскому проспекту. Автобусы №12, №84 — 2 остановки до «Скай Гарден».</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-section">
+        <h2>Схема проезда</h2>
+        <div class="map-container">
+          <svg class="map-svg" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="480" fill="#E8F4FD"/>
+            <path d="M 0 380 Q 150 350 300 380 T 600 360 L 600 480 L 0 480 Z" fill="#AED6F1" opacity="0.5"/>
+            <text x="450" y="450" font-size="11" fill="#5DADE2" font-family="Arial">Река</text>
+            <rect x="0" y="220" width="600" height="35" fill="#FFFFFF" stroke="#B0D4F1" stroke-width="2"/>
+            <line x1="0" y1="237" x2="600" y2="237" stroke="#D5E8F7" stroke-width="2" stroke-dasharray="10,10"/>
+            <text x="420" y="212" font-size="12" fill="#2C3E50" font-family="Arial" font-weight="bold">Ленинградский проспект</text>
+            <rect x="180" y="0" width="30" height="480" fill="#FFFFFF" stroke="#B0D4F1" stroke-width="2"/>
+            <line x1="195" y1="0" x2="195" y2="480" stroke="#D5E8F7" stroke-width="2" stroke-dasharray="10,10"/>
+            <text x="120" y="430" font-size="11" fill="#2C3E50" font-family="Arial" font-weight="bold" transform="rotate(-90 120,430)">ул. Бутырская</text>
+            <rect x="420" y="0" width="25" height="480" fill="#FFFFFF" stroke="#B0D4F1" stroke-width="2"/>
+            <line x1="432" y1="0" x2="432" y2="480" stroke="#D5E8F7" stroke-width="2" stroke-dasharray="10,10"/>
+            <text x="500" y="120" font-size="11" fill="#2C3E50" font-family="Arial" font-weight="bold" transform="rotate(90 500,120)">ул. Расковой</text>
+            <rect x="40" y="40" width="110" height="130" fill="#A8E6CF" rx="15" opacity="0.7"/>
+            <circle cx="70" cy="80" r="8" fill="#82E0AA"/>
+            <circle cx="110" cy="110" r="10" fill="#82E0AA"/>
+            <circle cx="90" cy="140" r="7" fill="#82E0AA"/>
+            <circle cx="130" cy="70" r="9" fill="#82E0AA"/>
+            <text x="95" y="105" text-anchor="middle" font-size="12" fill="#1E8449" font-family="Arial" font-weight="bold">Парк</text>
+            <circle cx="195" cy="195" r="16" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+            <text x="195" y="200" text-anchor="middle" font-size="14" fill="white" font-weight="bold" font-family="Arial">М</text>
+            <text x="225" y="190" font-size="13" fill="#2C3E50" font-family="Arial" font-weight="bold">м. Динамо</text>
+            <text x="225" y="208" font-size="11" fill="#5D6D7E" font-family="Arial">~7 мин. пешком</text>
+            <circle cx="432" cy="195" r="14" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+            <text x="432" y="199" text-anchor="middle" font-size="12" fill="white" font-weight="bold" font-family="Arial">М</text>
+            <text x="460" y="188" font-size="12" fill="#2C3E50" font-family="Arial" font-weight="bold">м. Белорусская</text>
+            <text x="460" y="204" font-size="10" fill="#5D6D7E" font-family="Arial">~12 мин. пешком</text>
+            <rect x="260" y="265" width="80" height="55" fill="#5DADE2" rx="6" stroke="#2980B9" stroke-width="2"/>
+            <rect x="270" y="275" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <rect x="295" y="275" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <rect x="320" y="275" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <rect x="270" y="298" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <rect x="295" y="298" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <rect x="320" y="298" width="14" height="14" fill="#FFFFFF" rx="2"/>
+            <text x="300" y="340" text-anchor="middle" font-size="11" fill="#2C3E50" font-family="Arial" font-weight="bold">ЖК «Скай Гарден»</text>
+            <path d="M300 255 C300 240, 315 240, 315 255 C315 265, 300 285, 300 285 C300 285, 285 265, 285 255 C285 240, 300 240, 300 255" fill="#E74C3C" stroke="#C0392B" stroke-width="1.5"/>
+            <circle cx="300" cy="252" r="5" fill="white"/>
+            <text x="300" y="305" text-anchor="middle" font-size="11" fill="#E74C3C" font-weight="bold" font-family="Arial">Центр «Гармония»</text>
+            <text x="300" y="320" text-anchor="middle" font-size="10" fill="#5D6D7E" font-family="Arial">офис 304, 3-й этаж</text>
+            <path d="M 195 220 Q 220 240 250 260 L 285 275" fill="none" stroke="#E74C3C" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#arrow)"/>
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#E74C3C"/>
+              </marker>
+            </defs>
+            <text x="230" y="255" font-size="10" fill="#E74C3C" font-family="Arial" font-weight="bold">Маршрут</text>
+            <text x="230" y="268" font-size="10" fill="#E74C3C" font-family="Arial" font-weight="bold">пешком</text>
+            <path d="M 432 220 Q 400 240 360 260 L 320 275" fill="none" stroke="#3498DB" stroke-width="2" stroke-dasharray="5,5"/>
+            <text x="380" y="255" font-size="10" fill="#3498DB" font-family="Arial">Автобус №12, №84</text>
+            <rect x="150" y="270" width="50" height="30" fill="#FADBD8" rx="5" stroke="#E74C3C" stroke-width="1" stroke-dasharray="4,2"/>
+            <text x="175" y="290" text-anchor="middle" font-size="10" fill="#C0392B" font-family="Arial" font-weight="bold">P</text>
+            <text x="175" y="315" text-anchor="middle" font-size="9" fill="#C0392B" font-family="Arial">Парковка</text>
+            <line x1="40" y1="420" x2="140" y2="420" stroke="#2C3E50" stroke-width="2"/>
+            <line x1="40" y1="415" x2="40" y2="425" stroke="#2C3E50" stroke-width="2"/>
+            <line x1="140" y1="415" x2="140" y2="425" stroke="#2C3E50" stroke-width="2"/>
+            <text x="90" y="440" text-anchor="middle" font-size="11" fill="#2C3E50" font-family="Arial">100 м</text>
+            <polygon points="550,40 560,70 540,70" fill="#2C3E50"/>
+            <text x="550" y="30" text-anchor="middle" font-size="12" fill="#2C3E50" font-family="Arial" font-weight="bold">N</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Центр психологической помощи «Гармония»</p>
+    <p>г. Москва, Ленинградский проспект, д. 15, корп. 2, офис 304 | Тел: +7 (495) 234-56-78 | <a onclick="showPage('contacts')">Перейти на страницу контактов</a></p>
+  </footer>
+</div>
+
+<script>
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + pageId).classList.add('active');
+    if (pageId === 'home') document.getElementById('nav-home').classList.add('active');
+    if (pageId === 'contacts') document.getElementById('nav-contacts').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => animateCharts(), 300);
+  }
+
+  function animateCharts() {
+    document.querySelectorAll('.bar').forEach(bar => {
+      const h = bar.getAttribute('data-h');
+      if (h) bar.style.height = h + 'px';
+    });
+  }
+
+  setTimeout(() => animateCharts(), 500);
+</script>
+
+</body>
+</html>
